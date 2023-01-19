@@ -10,7 +10,9 @@ public class Cell {
 	
 	// cell's properties
 	private final boolean isMine;
-	private final boolean isVisible;
+	private boolean isVisible;
+	
+	private String closedState = "[ ]";
 	
 	public Cell(int positionX, int positionY, boolean isMine, boolean isVisible ) { 
 		this.positionX = positionX;
@@ -18,6 +20,36 @@ public class Cell {
 		this.isMine = isMine;
 		this.isVisible = isVisible;
 	}
+
+	public boolean isVisible() {
+		return isVisible;
+	}
+
+	public void setVisible(boolean isVisible) {
+		this.isVisible = isVisible;
+	}
+
+	public String getClosedState() {
+		return closedState;
+	}
+
+	public void setClosedState(String closedState) {
+		this.closedState = closedState;
+	}
+
+	public int getPositionX() {
+		return positionX;
+	}
+
+	public int getPositionY() {
+		return positionY;
+	}
+
+	public boolean isMine() {
+		return isMine;
+	}
+	
+	
 	
 
 }
