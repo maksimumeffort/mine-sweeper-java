@@ -61,7 +61,7 @@ public class Minesweeper extends Display {
         {
             fixNearFields(i, j, visibleGrid, hiddenGrid);
         }
-
+//        s.close();
         return true;
     }
 	

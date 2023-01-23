@@ -19,7 +19,7 @@ public abstract class Display {
             {
                 if(visibleGrid[i][j]==0)
                 {
-                    System.out.print(" ");
+                    System.out.print("?");
                 }
                 else if(visibleGrid[i][j]==50)
                 {
