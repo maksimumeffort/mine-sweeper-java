@@ -7,126 +7,43 @@ import java.util.List;
 import java.util.Random;
 
 public class Scrapbook {
-	
-	
-	public class Mine {
-		
-		public boolean hasDetonated;
-		
-		public Mine() {
-			this.hasDetonated = false;
-		}
-		
-		public void detonate() {
-			this.hasDetonated = true;
-		}
-	}
-	
-	static public class Cell {
-		
-		// type of cell
-		// 0 - mine
-		// 1 - number
-		// 2 - blank
-		
-		public int cellType;
-		public int position;
-		public boolean opened;
-		
-		public Cell(int cellType, int position) {
-			this.cellType = cellType;
-			this.position = position;
-			this.opened = false;
-		}	
-		
-	}
-	
-	static class Grid {
-		
-		Random rand = new Random();
-		private int amountOfBombs = 10;
-		private int rows = 10;
-		private int columns = 10;
-		private ArrayList<Integer> minesArray = new ArrayList<>();
-		public static ArrayList<Cell> cellsArray = new ArrayList<>();
-		
-		
-		
-		public Grid() {
-			createCells();
-		}
-		
-		public ArrayList<Integer> checkForMines(int position) {
-			
-			ArrayList<Integer> cellsAroundArray = new ArrayList<>();
-			int[] values = {+1, -1, +10, -10, +9, +11, -9, -11};
-			ArrayList<Integer> cellsAround = new ArrayList<>();
-			for(int i = 0; i < 8; i++) {
-				cellsAroundArray.add(position + values[i]);
-			}
-			
-			return cellsAroundArray;
-		}
-		
-		public void createCells() {
-			// build a list of mines with position
-			
-			while(minesArray.stream().distinct().count() != amountOfBombs)
-				for(int i = 0; i < amountOfBombs; i++) {
-					int randPosition = rand.nextInt(rows * columns);
-					if(!minesArray.contains(randPosition)) {
-						minesArray.add(randPosition);
-				}
-			}
-			for (int pos = 0; pos < rows * columns; pos++) {
-				// list of all the positions around the selected position
-				ArrayList<Integer> neighbors = checkForMines(pos);
-				
-				if(minesArray.contains(pos)) {
-					// 0 = bomb
-					cellsArray.add(new Cell(0, pos));
-				} else if (minesArray.contains(neighbors)){
-					// 1 = number
-					cellsArray.add(new Cell(1, pos));
-				} else {
-					// 2 = blank
-					cellsArray.add(new Cell(3, pos));
-				}
-				
-			}
-		}
-	}
-	
-	
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		Random rand = new Random();
+		// test code
 		
-		Grid grid = new Grid();
+		Grid field = new Grid();
 		
-		ArrayList<Cell> openGrid = grid.cellsArray;
+		Cell[][] fieldCellsArray = field.cellsArray;
 		
-//		System.out.println(grid.cellsArray.size());
-		
-		
-		int[][] visibleField = new int[10][10];
+		String[][] hiddenField = new String[10][10];
+		String[][] visibleField = new String[10][10];
 				
-		for(int i = 0; i < visibleField.length; i++) {
-			for(int j = 0; j < visibleField[i].length; j++){
-				visibleField[i][j] = openGrid.get(j).cellType;
+//		int counter = 0;
+		for(int i = 0; i < fieldCellsArray.length; i++) {
+			for(int j = 0; j < fieldCellsArray[i].length; j++){
+//				System.out.println(i + "-" + j);
+				boolean isMine = fieldCellsArray[i][j].isMine;
+				
+				visibleField[i][j] = isMine ? "[*]" : "[ ]";
+				
+				
 			}
 		}
 		
+//		System.out.println(grid.cellsAroundArray);
+		
 		
 		// display 
-		System.out.println("   0 1 2 3 4 5 6 7 8 9");
+		System.out.println("    0   1   2   3   4   5   6   7   8   9");
 		System.out.println();
 		
 		for(int i = 0; i < visibleField.length; i++) {
 			System.out.print(i + "  ");
 			for(int j= 0; j < visibleField[i].length; j++) {
 				
-				System.out.print(visibleField[i][j] + " ");
+				System.out.print(visibleField[i][j]);
 			}
 			System.out.println();
 		}
@@ -134,28 +51,9 @@ public class Scrapbook {
 		
 		
 		
-//		String[][] matrix3 = {
-//				{"?", "?", "?", "?", "?", "?", "?", "?", "?", "?"},
-//				{"?", "?", "?", "?", "?", "?", "?", "?", "?", "?"},
-//				{"?", "?", "?", "?", "?", "?", "?", "?", "?", "?"},
-//				{"?", "?", "?", "?", "?", "?", "?", "?", "?", "?"},
-//				{"?", "?", "?", "?", "?", "?", "?", "?", "?", "?"},
-//				{"?", "?", "?", "?", "?", "?", "?", "?", "?", "?"},
-//				{"?", "?", "?", "?", "?", "?", "?", "?", "?", "?"},
-//				{"?", "?", "?", "?", "?", "?", "?", "?", "?", "?"},
-//				{"?", "?", "?", "?", "?", "?", "?", "?", "?", "?"},
-//				{"?", "?", "?", "?", "?", "?", "?", "?", "?", "?"}
-//				
-//		};
-		
-		
-		
-		
 		// create 10 bombs
-		Random rand = new Random();
+//		Random rand = new Random();
 		
-		
-		ArrayList<Cell> cellsArray = new ArrayList<>();
 //		Cell[][] matrix1 = new Cell[10][10];
 		
 		// build a list of mines with position
@@ -194,7 +92,7 @@ public class Scrapbook {
 			cellsAroundArray.add(position + values[i]);
 		}
 			
-		System.out.println(cellsAroundArray);
+//		System.out.println(cellsAroundArray);
 		
 		
 		
