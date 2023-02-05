@@ -35,10 +35,8 @@ public class Grid {
 				newList.add(randPos);
 				Integer posInList = origList.indexOf(randPos);
 				origList.remove(origList.get(posInList));
-				// System.out.println("removed: "+ randPos);
 			}
-		}
-		// System.out.println("end of while loop");	
+		}	
 	}
 	
 
@@ -48,38 +46,77 @@ public class Grid {
 		// generate a minePosXlist
 		generateMines(positionsX, minePosXlist);
 		Integer[] minePosXarray = minePosXlist.toArray(new Integer[0]);
-		System.out.println(Arrays.toString(minePosXarray));
 		
 		// generate a minePosYlist
 		generateMines(positionsY, minePosYlist);
 		Integer[] minePosYarray = minePosYlist.toArray(new Integer[0]);
-		System.out.println(Arrays.toString(minePosYarray));
 		
 		// loop through 
-		for (Integer outer = 1; outer < 11; outer++) {
-//			System.out.println("outer" + outer);
-			for(Integer inner= 1; inner < 11; inner++) {
+		for (Integer outer = 0; outer < cellsArray.length; outer++) {
+
+			for(Integer inner = 0; inner < cellsArray[outer].length; inner++) {
 				
 				// get index of value 1 in minePosXarray
-				Integer indexOfOuter = minePosXlist.indexOf(outer);
+				Integer indexOfOuter = minePosXlist.indexOf(outer+1);
 				// check inner = the position of minePosYarray at that index
 				// if true -> mine, else normal cell
-				if(inner == minePosYarray[indexOfOuter]) {
-					System.out.println("mine created @" + outer + inner);
-					cellsArray[outer-1][inner-1] = new Cell(true, outer, minePosYarray[indexOfOuter]);
+				if(inner+1 == minePosYarray[indexOfOuter]) {
+					cellsArray[outer][inner] = new Cell(true, outer, minePosYarray[indexOfOuter]);
 				} else {
-					cellsArray[outer-1][inner-1] = new Cell(false, outer-1, inner-1);
+					cellsArray[outer][inner] = new Cell(false, outer, inner);
 				}
 			}
 		}
 	}
 	
-	public void checkCells(Cell selectedCell) {
+	public Integer checkCellsAround(Cell selectedCell) {
 		int amountOfmines = 0;
-		// loop through all the surrounding cells of selectedCell, look for mines
-		// increment amountOfMines value each time a mine is found in neighbour cell
+		int[] coords = {0, -1, +1};
+		String[] checker = {"both", "left", "right"};
+		int[] selectedPositions = {selectedCell.posX, selectedCell.posY};
+		List<Integer> cellPosXList = new ArrayList<Integer>();
+		List<Integer> cellPosYList = new ArrayList<Integer>();
 		
+		for(int turnInd = 0; turnInd < 3; turnInd++) {
 	
+			for(int checkInd = 0; checkInd < 3; checkInd++) {
+				// chech which checker is activated 
+				if(checker[turnInd] == "both") {
+					// increment both x and y positions
+					cellPosXList.add(selectedPositions[0]+coords[checkInd]);
+					cellPosYList.add(selectedPositions[1]+coords[checkInd]);
+					
+				} else if (checker[turnInd] == "left") {
+					// increment positions y only
+					cellPosXList.add(selectedPositions[0]);
+					cellPosYList.add(selectedPositions[1]+coords[checkInd]);
+					
+				} else {
+					// increment positions x only
+					cellPosXList.add(selectedPositions[0]+coords[checkInd]);
+					cellPosYList.add(selectedPositions[1]);
+				}
+			}
+		}
+		
+		for (int pos = 0; pos < cellPosXList.size(); pos++) {
+			// delete initial coordinates
+			if(pos == 0) {
+				cellPosXList.remove(pos);
+				cellPosYList.remove(pos);
+			}
+			
+			int x = cellPosXList.get(pos);
+			int y = cellPosYList.get(pos);
+			boolean validPos = x >= 0 && x < 10 && y >= 0 && y < 10;
+			
+			if(validPos && cellsArray[x][y].isMine == true) {
+				amountOfmines++;
+			}
+		}
+			
+		return amountOfmines;
+		
 	}
 			
 			

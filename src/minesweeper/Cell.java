@@ -19,5 +19,6 @@ public class Cell {
 		this.posX = posX;
 		this.posY = posY;
 		this.opened = false;
+		
 	}	
 }
